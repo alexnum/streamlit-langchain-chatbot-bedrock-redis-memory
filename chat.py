@@ -19,6 +19,7 @@ if "chat_id" not in st.session_state:
     st.session_state.chat_id = str(uuid.uuid4())
 
 redis_conn_string = os.environ.get("REDIS_CONN_STRING")
+MODEL_ID=os.environ.get("MODEL_ID")
 
 redis_chat_memory = RedisChatMessageHistory(url=redis_conn_string,session_id=st.session_state.chat_id)
 memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=redis_chat_memory, ai_prefix="\n\nAssistant", human_prefix="\n\nHuman")
@@ -26,8 +27,9 @@ memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=redis_c
 st.title("Streamlit chatbot")
 st.caption("Powered by Amazon Bedrock, Langchain and Redis")
 
+
 llm = Bedrock(
-        model_id="anthropic.claude-v2",
+        model_id=MODEL_ID,
         streaming=True,
     )
     

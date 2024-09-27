@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  app:
+    build: .
+    #Using this to debug container sometimes... ¯\_(ツ)_/¯
+    #command: ["tail", "-f", "/dev/null"]
+    expose:
+      - "8501"
+    ports:
+      - "8501:8501"
+    environment:
+      - REDIS_CONN_STRING=redis://default:12345678@cache/0
+    depends_on:
+      - cache
+    env_file: .env
+    restart: unless-stopped
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 50 1 --loglevel warning --requirepass 12345678
+    volumes:
+      - ./redisdata:/data
