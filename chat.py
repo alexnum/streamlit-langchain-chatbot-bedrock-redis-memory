@@ -23,9 +23,20 @@ MODEL_ID=os.environ.get("MODEL_ID")
 
 redis_chat_memory = RedisChatMessageHistory(url=redis_conn_string,session_id=st.session_state.chat_id)
 memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=redis_chat_memory, ai_prefix="\n\nAssistant", human_prefix="\n\nHuman")
+    
+st.markdown("""
+<style>
+body {background: #242424;}
+#assistente-ia span {display: none;}
+.stAppHeader {display: none;}
+</style>""", unsafe_allow_html=True)
+st.title("Assistente IA")
 
-st.title("Streamlit chatbot")
-st.caption("Powered by Amazon Bedrock, Langchain and Redis")
+print("QP", st.query_params)
+if 'subtitle' in st.query_params:
+    subtitle = st.query_params['subtitle']
+    st.caption(subtitle)
+
 
 
 llm = Bedrock(
