@@ -1,14 +1,22 @@
 version: '3.7'
 
 services:
+  nginx:
+    image: nginx:1.15.8
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
   app:
     build: .
     #Using this to debug container sometimes... ¯\_(ツ)_/¯
     #command: ["tail", "-f", "/dev/null"]
     expose:
       - "8501"
-    ports:
-      - "8501:8501"
     environment:
       - REDIS_CONN_STRING=redis://default:12345678@cache/0
     depends_on:
